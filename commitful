@@ -1,0 +1,6 @@
+#!/bin/bash
+for d in `find . -name .git | xargs dirname `; do
+  pushd $d >/dev/null
+  echo "$d : " `git status| wc -l`
+  popd >/dev/null
+done
