@@ -1,6 +1,13 @@
 #!/bin/bash
 for d in `find . -name .git | xargs dirname `; do
   pushd $d >/dev/null
-  echo "$d : " `git status| wc -l`
+  status="undefined"
+  [ `git status | grep -c "nothing to commit, working directory clean"` -gt 0 ] && status="clean"
+  [ `git status | grep -c "Untracked files:"` -gt 0 ] && status="untracked"
+  [ `git status | grep -c "Changes not staged for commit:"` -gt 0 ] && status="not staged"
+  [ `git status | grep -c "Changes to be committed:"` -gt 0 ] && status="to be committed"
+  [ `git status | grep -c "Your branch is ahead of"` -gt 0 ] && status="ahead of"
+  f=`git status|grep -cE "modified\:|added\:"`
+  echo "[$status] ($f files) $d : status has `git status| wc -l` lines"
   popd >/dev/null
 done
