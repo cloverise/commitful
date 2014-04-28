@@ -1,5 +1,5 @@
 #!/bin/bash
-for d in `find . -name .git | xargs dirname `; do
+for d in $(find -name '.git' -printf "%h\n"); do
   pushd $d >/dev/null
   status="undefined"
   [ `git status | grep -c "nothing to commit, working directory clean"` -gt 0 ] && status="clean"
